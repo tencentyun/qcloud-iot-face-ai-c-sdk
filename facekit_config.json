@@ -1,0 +1,40 @@
+{
+    "download_dir": {
+        "license_dir": "./",
+        "resource_dir": "./resource",
+        "img_dir": "./images"
+    },
+    "facekit_options": {
+        "tracker": {
+            "lib_dir": "./models/face-tracker-v435_v420",
+            "config": "config.ini",
+            "params": {
+                "threshold": 0.93,
+                "detect_interval": 6,
+                "image_type": 0,
+                "image_padding": 0
+            }
+        },
+        "feature": {
+            "lib_dir": "./models/face-feature-v704",
+            "config": "config.ini"
+        },
+        "alignment": {
+            "lib_dir": "./models/face-alignment-v236",
+            "config": "config.ini"
+        },
+        "quality_pro": {
+            "lib_dir": "./models/face-quality-pro-v204",
+            "config": "config.ini",
+            "score_facing_threshold": 0.7783,
+            "score_visibility_threshold": 0.7001,
+            "score_sharp_threshold": 0.4575,
+            "score_bright_env_threshold": 0.75,
+            "score_dark_env_threshold": 0.3627,
+            "is_bright_environment_mode": 0
+        },
+        "retrieval": {
+            "cvt_table_path": "./models/face-feature-v704/cvt_table_1vN_704.txt"
+        }
+    }
+}
