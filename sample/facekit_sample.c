@@ -39,6 +39,7 @@ extern int  facekit_cb_register_features(void* handle, FeatureRegisterFunc func)
 extern int  facekit_cb_ext_save_events(const char* event_json, int len);
 extern void facekit_cb_get_feature_fail(const char* face_lib, const char* feature_id, int error);
 extern void facekit_cb_download_fail(const char* face_lib, const char* feature_id, const char* url);
+extern void facekit_cb_download_success(const char* face_lib, const char* feature_id, const char* img_path);
 
 static pthread_t sg_data_template_thread;
 static int       sg_data_template_task_exit = 0;
@@ -58,15 +59,18 @@ static size_t sg_data_report_buffersize = sizeof(sg_data_report_buffer) / sizeof
 
 static int sg_main_exit = 0;
 
-static int _check_and_create_dir(const char* dir)
+static int _check_and_create_dir(const char* path)
 {
-    int rc;
-    if (!opendir(dir)) {
-        rc = mkdir(dir, S_IRWXU);
+    int  rc;
+    DIR* dir = opendir(path);
+    if (!dir) {
+        rc = mkdir(path, S_IRWXU);
         if (rc) {
-            Log_e("mkdir %s failed", dir);
+            Log_e("mkdir %s failed", path);
             return rc;
         }
+    } else {
+        closedir(dir);
     }
     return 0;
 }
@@ -354,6 +358,7 @@ int main(int argc, char** argv)
     sg_callback.facekit_offline_events_save           = facekit_cb_ext_save_events;
     sg_callback.facekit_error_handle_get_feature_fail = facekit_cb_get_feature_fail;
     sg_callback.facekit_error_handle_download_fail    = facekit_cb_download_fail;
+    sg_callback.facekit_handle_download_success       = facekit_cb_download_success;
 
     // 2. init mqtt connection
     TemplateInitParams init_params = DEFAULT_TEMPLATE_INIT_PARAMS;

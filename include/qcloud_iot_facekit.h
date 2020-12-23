@@ -68,6 +68,7 @@ typedef struct {
     int (*facekit_offline_events_save)(const char *event_json, int len);
     void (*facekit_error_handle_get_feature_fail)(const char *face_lib, const char *feature_id, int error);
     void (*facekit_error_handle_download_fail)(const char *face_lib, const char *feature_id, const char *url);
+    void (*facekit_handle_download_success)(const char *face_lib, const char *feature_id, const char *img_path);
 } IOT_FaceKit_CallBack;
 
 typedef struct {

@@ -41,7 +41,6 @@ static int _remove_dir(const char *dir)
     }
 
     if (0 > stat(dir, &dir_stat)) {
-        perror("get directory stat error");
         return -1;
     }
 
@@ -59,9 +58,8 @@ static int _remove_dir(const char *dir)
         closedir(dirp);
         rmdir(dir);
     } else {
-        perror("unknow file type!");
+        Log_e("unknow file type!");
     }
-
     return 0;
 }
 
@@ -99,12 +97,15 @@ int facekit_cb_save_feature(const char *face_lib, const char *feature_id, float 
 
     HAL_Snprintf(file_dir, 128, "./feat/%s", face_lib);
 
-    if (!opendir(file_dir)) {
+    DIR *dir = opendir(file_dir);
+    if (!dir) {
         int rc = mkdir(file_dir, S_IRWXU);
         if (rc) {
             Log_e("mkdir %s failed", file_dir);
             return -1;
         }
+    } else {
+        closedir(dir);
     }
 
     HAL_Snprintf(file_path, 128, "./feat/%s/%s.feat", face_lib, feature_id);
@@ -156,7 +157,9 @@ int facekit_cb_del_face_lib(void *handle, const char *face_lib, FeatureUnRegiste
 exit:
     HAL_Free(feature_id);
     HAL_Snprintf(file_dir, 128, "./feat/%s", face_lib);
-    if (opendir(file_dir)) {
+    DIR *dir = opendir(file_dir);
+    if (dir) {
+        closedir(dir);
         return _remove_dir(file_dir);
     }
     return 0;
@@ -179,12 +182,15 @@ int facekit_cb_register_features(void *handle, FeatureRegisterFunc func)
 
     char file_path[128];
 
-    if (!opendir("./feat")) {
+    DIR *dir = opendir("./feat");
+    if (!dir) {
         rc = mkdir("./feat", S_IRWXU);
         if (rc) {
             Log_e("mkdir %s failed", "./feat");
             return rc;
         }
+    } else {
+        closedir(dir);
     }
 
     FILE *fp = fopen(FEATURE_RECORD, "a+");
@@ -213,12 +219,15 @@ exit:
 
 int facekit_cb_ext_save_events(const char *event_json, int len)
 {
-    if (!opendir("./log")) {
+    DIR *dir = opendir("./log");
+    if (!dir) {
         int rc = mkdir("./log", S_IRWXU);
         if (rc) {
             Log_e("mkdir %s failed", "./log");
             return rc;
         }
+    } else {
+        closedir(dir);
     }
 
     FILE *fp = fopen("./log/event.log", "ab+");
@@ -239,6 +248,11 @@ void facekit_cb_get_feature_fail(const char *face_lib, const char *feature_id, i
 }
 
 void facekit_cb_download_fail(const char *face_lib, const char *feature_id, const char *url)
+{
+    // if download failed do what you need
+}
+
+void facekit_cb_download_success(const char *face_lib, const char *feature_id, const char *img_path)
 {
     // if download failed do what you need
 }

@@ -136,6 +136,15 @@ SDK 配置主要包括设备信息配置（`device_info.json`）和人脸识别�
   * url：图片对应的url
 * **返回值：** 无
 
+**9. facekit_handle_download_success**
+* **简介：** 人脸图片下载成功回调，当云端下发的图片下载成功时触发
+* **声明：** `void (*facekit_handle_download_success)(const char *face_lib, const char *feature_id, const char *img_path);`
+* **参数：**
+  * face_lib：人脸库文件名，命名方式为`ai_face_list_<人员库ID>.csv`，其中人员库ID为控制台输入
+  * feature_id：特征ID，与人员ID保持一致
+  * img_path：图片下载到本地的路径
+* **返回值：** 无
+
 ## 业务逻辑开发
 
 根据业务需求，人脸识别服务开发请参见[IOT-Explorer人脸识别C-SDK-API说明](./IOT-Explorer人脸识别C-SDK-API说明.md)调用相应API开发业务逻辑，IoT Explorer的基础服务开发请参见[物联网开发平台设备端 C SDK使用参考](https://cloud.tencent.com/document/product/1081/48377)。
