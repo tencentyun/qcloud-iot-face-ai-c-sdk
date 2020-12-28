@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef QCLOUD_IOT_FACEKIT_H_
-#define QCLOUD_IOT_FACEKIT_H_
+#ifndef QCLOUD_IOT_FACE_AI_C_SDK_INCLUDE_QCLOUD_IOT_FACEKIT_H_
+#define QCLOUD_IOT_FACE_AI_C_SDK_INCLUDE_QCLOUD_IOT_FACEKIT_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -55,20 +55,26 @@ typedef struct {
     char *retrieval_cvt_table_path;
 } IOT_FaceKit_Config;
 
-typedef int (*FeatureRegisterFunc)(void *handle, float **features, char **feature_ids, const int num);
+typedef int (*FeatureRegisterFunc)(void *handle, float **features, char **feature_ids,
+                                   const int num);
+
 typedef int (*FeatureUnRegisterFunc)(void *handle, char **feature_ids, const int num);
 
 // callback should be implentmented by user
 typedef struct {
-    int (*facekit_feature_save)(const char *face_lib, const char *feature_id, float *feature, int length);
+    int (*facekit_feature_save)(const char *face_lib, const char *feature_id, float *feature,
+                                int length);
     int (*facekit_feature_delete)(const char *face_lib, const char *feature_id);
     int (*facekit_feature_check_exit)(const char *face_lib, const char *feature_id);
     int (*facekit_face_lib_delete)(void *handle, const char *face_lib, FeatureUnRegisterFunc func);
     int (*facekit_features_register)(void *handle, FeatureRegisterFunc func);
     int (*facekit_offline_events_save)(const char *event_json, int len);
-    void (*facekit_error_handle_get_feature_fail)(const char *face_lib, const char *feature_id, int error);
-    void (*facekit_error_handle_download_fail)(const char *face_lib, const char *feature_id, const char *url);
-    void (*facekit_handle_download_success)(const char *face_lib, const char *feature_id, const char *img_path);
+    void (*facekit_error_handle_get_feature_fail)(const char *face_lib, const char *feature_id,
+                                                  int error);
+    void (*facekit_error_handle_download_fail)(const char *face_lib, const char *feature_id,
+                                               const char *url);
+    void (*facekit_handle_download_success)(const char *face_lib, const char *feature_id,
+                                            const char *img_path);
 } IOT_FaceKit_CallBack;
 
 typedef struct {
@@ -122,8 +128,8 @@ void IOT_Facekit_GetConfig(IOT_FaceKit_Config *config);
  * @param[in] mqtt_client mqtt handle
  * @return handle
  */
-void *IOT_Facekit_Init(IOT_FaceKit_Config *config, IOT_FaceKit_CallBack callback, void *template_client,
-                       const char *product_id, const char *device_name);
+void *IOT_Facekit_Init(IOT_FaceKit_Config *config, IOT_FaceKit_CallBack callback,
+                       void *template_client, const char *product_id, const char *device_name);
 
 /**
  * @brief 反初始化
@@ -143,7 +149,8 @@ void IOT_Facekit_PrintVersion(void);
  *
  * @return 0 for success
  */
-int IOT_Facekit_RetrievalFeature(void *handle, IOT_FaceKit_Frame frame, float threshold, char *feature_id);
+int IOT_Facekit_RetrievalFeature(void *handle, IOT_FaceKit_Frame frame, float threshold,
+                                 char *feature_id);
 
 /**
  * @brief 特征库事件上报
@@ -172,4 +179,4 @@ void IOT_Facekit_FeatureUpdateTaskStop(void *handle);
  */
 void IOT_Facekit_SetClient(void *handle, void *template_client);
 
-#endif /* QCLOUD_IOT_FACEKIT_H_ */
+#endif  // QCLOUD_IOT_FACE_AI_C_SDK_INCLUDE_QCLOUD_IOT_FACEKIT_H_
